@@ -3,7 +3,6 @@ package pl.piotrgluszek.announcements.entities;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Table(name = "Categories")
 @Entity
@@ -13,11 +12,11 @@ public class CategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String name;
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     List<AnnouncementEntity> announcements;
 
 
-    public CategoryEntity(){
+    public CategoryEntity() {
         announcements = new ArrayList<>();
     }
 

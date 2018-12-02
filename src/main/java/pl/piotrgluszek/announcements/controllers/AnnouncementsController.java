@@ -2,12 +2,12 @@ package pl.piotrgluszek.announcements.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.piotrgluszek.announcements.dto.AnnouncementDto;
 import pl.piotrgluszek.announcements.entities.AnnouncementEntity;
 import pl.piotrgluszek.announcements.services.AnnouncementsService;
+
+import java.net.URI;
 
 
 @RestController
@@ -17,9 +17,15 @@ public class AnnouncementsController {
     AnnouncementsService announcementsService;
 
     @GetMapping("/{id}")
-    ResponseEntity<AnnouncementEntity> gindById(@PathVariable("id") long id){
-
+    ResponseEntity<AnnouncementEntity> findById(@PathVariable("id") long id){
+        //TODO: increment view counter
         return ResponseEntity.ok(announcementsService.findAnnouncementById(id).orElse(null));
+    }
+
+    //TODO: return uri after creation
+    @PostMapping
+    ResponseEntity create(AnnouncementDto announcementDto) throws Exception{
+        return ResponseEntity.created(new URI("")).build();
     }
 
 
