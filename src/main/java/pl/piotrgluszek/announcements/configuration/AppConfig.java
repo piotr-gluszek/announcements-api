@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
     @Bean
-    ObjectMapper mapper(){
+    public ObjectMapper mapper(){
         return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .enable(SerializationFeature.INDENT_OUTPUT)
                 .setSerializationInclusion(JsonInclude.Include.NON_EMPTY);

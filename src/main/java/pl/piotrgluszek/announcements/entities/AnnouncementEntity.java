@@ -1,28 +1,30 @@
 package pl.piotrgluszek.announcements.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "Announcements")
 @Entity
 public class AnnouncementEntity {
 
     @Id
-    @GeneratedValue
-    long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     @JsonIgnoreProperties("announcements")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "announcerid")
     UserEntity announcer;
     Timestamp date;
-    long views;
+    Long views;
     String description;
     String title;
     @ManyToMany
