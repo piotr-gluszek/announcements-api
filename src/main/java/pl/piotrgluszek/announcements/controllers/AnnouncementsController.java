@@ -18,19 +18,19 @@ public class AnnouncementsController {
     AnnouncementsService announcementsService;
 
     @GetMapping("/{id}")
-    ResponseEntity<AnnouncementEntity> findById(@PathVariable("id") long id) {
+    public ResponseEntity<AnnouncementEntity> findById(@PathVariable("id") long id) {
         //TODO: increment view counter
         return ResponseEntity.ok(announcementsService.findAnnouncementById(id).orElse(null));
     }
 
     @PostMapping
-    ResponseEntity create(@RequestBody AnnouncementEntity announcementEntity) throws Exception {
+    public ResponseEntity create(@RequestBody AnnouncementEntity announcementEntity) throws Exception {
         AnnouncementEntity createdAnnouncement = announcementsService.create(announcementEntity);
         return ResponseEntity.created(new URI("/annoumcements/" + createdAnnouncement.getId())).body(createdAnnouncement);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity update(@PathVariable("id") long id,
+    public ResponseEntity update(@PathVariable("id") long id,
                           @RequestBody AnnouncementEntity announcementEntity) {
         try {
             return ResponseEntity.ok(announcementsService.update(announcementEntity.setId(id)));
