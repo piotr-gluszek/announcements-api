@@ -2,6 +2,8 @@ package pl.piotrgluszek.announcements.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.piotrgluszek.announcements.entities.AnnouncementEntity;
 import pl.piotrgluszek.announcements.mappers.AnnouncementEntityMapper;
@@ -37,11 +39,14 @@ public class AnnouncementsService {
     }
 
     public void delete(Long id) {
-
         try {
             announcementsRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ersae) {
             throw new NoSuchElementException(String.format(NO_SUCH_ANNOUNCEMENT, id));
         }
+    }
+
+    public Page<AnnouncementEntity> findAll(Pageable pageable){
+        return announcementsRepository.findAll(pageable);
     }
 }

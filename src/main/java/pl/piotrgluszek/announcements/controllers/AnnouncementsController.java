@@ -1,6 +1,8 @@
 package pl.piotrgluszek.announcements.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,11 @@ public class AnnouncementsController {
     AnnouncementsService announcementsService;
 
 
+    @GetMapping
+    public ResponseEntity<Page<AnnouncementEntity>> findAll(Pageable pageable){
+        return ResponseEntity.ok().body(announcementsService.findAll(pageable));
+
+    }
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") long id) {
         //TODO: increment view counter
@@ -54,6 +61,4 @@ public class AnnouncementsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorEntity().setMessage(nse.getMessage()));
         }
     }
-
-
 }
