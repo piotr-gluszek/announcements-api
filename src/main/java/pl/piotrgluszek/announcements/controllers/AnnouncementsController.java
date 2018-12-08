@@ -24,8 +24,8 @@ public class AnnouncementsController {
     @GetMapping
     public ResponseEntity<Page<AnnouncementEntity>> findAll(Pageable pageable){
         return ResponseEntity.ok().body(announcementsService.findAll(pageable));
-
     }
+
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") long id) {
         //TODO: increment view counter

@@ -27,15 +27,14 @@ public class AnnouncementsService {
     }
 
     public AnnouncementEntity create(AnnouncementEntity announcementEntity) {
-        return announcementsRepository.save(announcementEntity);
+        return announcementsRepository.save(announcementEntity.setId(null));
     }
 
     public AnnouncementEntity update(AnnouncementEntity announcementEntity) {
-        if (announcementsRepository.existsById(announcementEntity.getId())) {
-            AnnouncementEntity originalEntity = announcementsRepository.findById(announcementEntity.getId()).get();
-            announcementEntityMapper.updateAnnouncement(announcementEntity, originalEntity);
-            return announcementsRepository.save(originalEntity);
-        } else throw new NoSuchElementException(String.format(NO_SUCH_ANNOUNCEMENT, announcementEntity.getId()));
+        AnnouncementEntity originalEntity = announcementsRepository.findById(announcementEntity.getId())
+                .orElseThrow(() -> new NoSuchElementException(String.format(NO_SUCH_ANNOUNCEMENT, announcementEntity.getId())));
+        announcementEntityMapper.updateAnnouncement(announcementEntity, originalEntity);
+        return announcementsRepository.save(originalEntity);
     }
 
     public void delete(Long id) {
@@ -46,7 +45,7 @@ public class AnnouncementsService {
         }
     }
 
-    public Page<AnnouncementEntity> findAll(Pageable pageable){
+    public Page<AnnouncementEntity> findAll(Pageable pageable) {
         return announcementsRepository.findAll(pageable);
     }
 }
