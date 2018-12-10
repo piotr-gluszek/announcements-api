@@ -1,6 +1,7 @@
 package pl.piotrgluszek.announcements.configuration;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.mapstruct.factory.Mappers;
@@ -15,6 +16,8 @@ public class AppConfig {
     public ObjectMapper mapper(){
         return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .enable(SerializationFeature.INDENT_OUTPUT)
-                .setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+                .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
     }
 }

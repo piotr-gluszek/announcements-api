@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"username", "password"})
+@JsonIgnoreProperties(value = {"username", "password"}, allowSetters = true)
 @Table(name = "Users")
 @Entity
 public class UserEntity {

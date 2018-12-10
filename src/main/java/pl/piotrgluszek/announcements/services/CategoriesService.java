@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class CategoriesService {
-    public static String NO_SUCH_CATEGORY = "Category with id [%d] does not exist";
+    public static final String NO_SUCH_CATEGORY = "Category with id [%d] does not exist";
     @Autowired
     CategoriesRepository categoriesRepository;
 
