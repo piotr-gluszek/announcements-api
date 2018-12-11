@@ -33,6 +33,7 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+
         return ResponseEntity.ok("Is authenticated: " + authentication.isAuthenticated());
     }
 
@@ -46,4 +47,5 @@ public class UserController {
         }
 
     }
+
 }
