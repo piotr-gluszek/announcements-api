@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import pl.piotrgluszek.announcements.authentication.TokenManager;
 import pl.piotrgluszek.announcements.entities.UserEntity;
 import pl.piotrgluszek.announcements.error.ErrorEntity;
 import pl.piotrgluszek.announcements.services.UserService;
@@ -21,20 +21,23 @@ public class UserController {
     UserService userService;
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    TokenManager jwtTokenManager;
 
     @PostMapping("login")
     public ResponseEntity login(@RequestBody UserEntity user) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getUsername(),
-                        user.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-        return ResponseEntity.ok("Is authenticated: " + authentication.isAuthenticated());
+        String token;
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getUsername(),
+                            user.getPassword()
+                    ));
+            token = jwtTokenManager.generateToken(3);
+        } catch (AuthenticationException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        }
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("register")
