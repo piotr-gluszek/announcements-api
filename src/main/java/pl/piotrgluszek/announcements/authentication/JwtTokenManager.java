@@ -30,13 +30,13 @@ public class JwtTokenManager implements TokenManager {
 
     @Override
     public Long getSubject(String token) {
-        return Long.parseLong(Jwts.parser().setSigningKey(jwtSecret).parseClaimsJwt(token).getBody().getSubject());
+        return Long.parseLong(Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject());
     }
 
     @Override
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJwt(token);
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
             return false;

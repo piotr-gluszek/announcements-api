@@ -3,7 +3,6 @@ package pl.piotrgluszek.announcements.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -13,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 
 
 @Component
@@ -26,13 +26,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = getJwtToken(httpServletRequest);
         if (token != null && token != "" && jwtTokenManager.validateToken(token)) {
-            UsernamePasswordAuthenticationToken authentication = null;
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    jwtTokenManager.getSubject(token),
+                    null,
+                    Collections.emptyList());
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
     private String getJwtToken(HttpServletRequest request) {
-        return request.getHeader("Authentication").split(" ")[1];
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.contains("Bearer"))
+            return authHeader.split(" ")[1];
+        return null;
     }
 }
