@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.piotrgluszek.announcements.authentication.TokenManager;
 import pl.piotrgluszek.announcements.entities.UserEntity;
-import pl.piotrgluszek.announcements.error.ErrorEntity;
+import pl.piotrgluszek.announcements.model.ApiMessage;
 import pl.piotrgluszek.announcements.services.UserService;
 
 @RestController
@@ -33,11 +33,12 @@ public class UserController {
                             user.getUsername(),
                             user.getPassword()
                     ));
-            token = jwtTokenManager.generateToken(3);
+
+            token = jwtTokenManager.generateToken(userService.findByUsername(user.getUsername()).getId());
         } catch (AuthenticationException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiMessage(ex.getMessage()));
         }
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new ApiMessage(token));
     }
 
     @PostMapping("register")
@@ -46,7 +47,7 @@ public class UserController {
             userService.create(user);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorEntity().setMessage(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiMessage(e.getMessage()));
         }
 
     }

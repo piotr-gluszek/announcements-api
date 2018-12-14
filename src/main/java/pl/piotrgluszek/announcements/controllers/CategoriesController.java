@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.piotrgluszek.announcements.entities.AnnouncementEntity;
-import pl.piotrgluszek.announcements.error.ErrorEntity;
+import pl.piotrgluszek.announcements.model.ApiMessage;
 import pl.piotrgluszek.announcements.services.CategoriesService;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class CategoriesController {
         try {
             return ResponseEntity.ok(categoriesService.findById(id));
         } catch (NoSuchElementException nse) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorEntity().setMessage(nse.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiMessage().setMessage(nse.getMessage()));
         }
     }
 
@@ -37,7 +37,7 @@ public class CategoriesController {
         try {
             return ResponseEntity.ok(paginate(categoriesService.findById(id).getAnnouncements(), pageable));
         } catch (NoSuchElementException nse) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorEntity().setMessage(nse.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiMessage().setMessage(nse.getMessage()));
         }
     }
 

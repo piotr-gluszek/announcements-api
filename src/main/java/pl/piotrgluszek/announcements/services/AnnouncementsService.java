@@ -21,7 +21,6 @@ public class AnnouncementsService {
     AnnouncementEntityMapper announcementEntityMapper;
 
     public AnnouncementEntity findById(long id) {
-        //TODO: will this operation always mean incrementing views counter?
         return announcementsRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(String.format(NO_SUCH_ANNOUNCEMENT, id)));
     }
