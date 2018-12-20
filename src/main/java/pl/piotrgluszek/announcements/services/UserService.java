@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 public class UserService implements UserDetailsService {
     public static final String NO_SUCH_USER_DETAILS = "User with username [%s] does not exist";
     public static final String USERNAME_TAKEN = "Username [%s] already taken";
+    public static final String NO_SUCH_USER = "User does not exist";
     @Autowired
     UsersRepository usersRepository;
     @Autowired
@@ -37,5 +38,9 @@ public class UserService implements UserDetailsService {
         if (usersRepository.existsByUsername(userEntity.getUsername()))
             throw new IllegalArgumentException(String.format(USERNAME_TAKEN, userEntity.getUsername()));
         usersRepository.save(userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword())));
+    }
+    public UserEntity findById(Long id){
+        return usersRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(NO_SUCH_USER));
     }
 }

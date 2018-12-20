@@ -16,6 +16,7 @@ import pl.piotrgluszek.announcements.services.UserService;
 
 @RestController
 public class UserController {
+    public static final String REGISTRATION_OK = "User [%s] registered successfully";
 
     @Autowired
     UserService userService;
@@ -45,11 +46,9 @@ public class UserController {
     public ResponseEntity register(@RequestBody UserEntity user) {
         try {
             userService.create(user);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(new ApiMessage(String.format(REGISTRATION_OK, user.getUsername())));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiMessage(e.getMessage()));
         }
-
     }
-
 }

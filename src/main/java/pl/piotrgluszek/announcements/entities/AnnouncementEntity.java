@@ -34,4 +34,5 @@ public class AnnouncementEntity {
             inverseJoinColumns = @JoinColumn(name = "categoryid")
     )
     List<CategoryEntity> categories;
+    String photo;
 }
