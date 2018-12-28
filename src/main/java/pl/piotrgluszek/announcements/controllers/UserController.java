@@ -6,13 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.piotrgluszek.announcements.authentication.TokenManager;
 import pl.piotrgluszek.announcements.entities.UserEntity;
 import pl.piotrgluszek.announcements.model.ApiMessage;
 import pl.piotrgluszek.announcements.services.UserService;
+
+import java.util.NoSuchElementException;
 
 @RestController
 public class UserController {
@@ -49,6 +49,15 @@ public class UserController {
             return ResponseEntity.ok(new ApiMessage(String.format(REGISTRATION_OK, user.getUsername())));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiMessage(e.getMessage()));
+        }
+    }
+
+    @GetMapping("users/{id}")
+    public ResponseEntity getById(@PathVariable("id") Long id) {
+        try {
+            return ResponseEntity.ok(userService.findById(id).setUsername(null).setPassword(null));
+        } catch (NoSuchElementException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiMessage(ex.getMessage()));
         }
     }
 }

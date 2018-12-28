@@ -1,9 +1,12 @@
 package pl.piotrgluszek.announcements.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties({"announcements"})
 @Table(name = "Categories")
 @Entity
 public class CategoryEntity {

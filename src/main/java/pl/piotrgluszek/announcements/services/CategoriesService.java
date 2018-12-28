@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.piotrgluszek.announcements.entities.CategoryEntity;
 import pl.piotrgluszek.announcements.repositories.CategoriesRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -15,5 +17,9 @@ public class CategoriesService {
 
     public CategoryEntity findById(Long id) {
         return categoriesRepository.findById(id).orElseThrow(() -> new NoSuchElementException(NO_SUCH_CATEGORY));
+    }
+
+    public List<CategoryEntity> getAll(){
+        return new ArrayList<>(categoriesRepository.findAll());
     }
 }

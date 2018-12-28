@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.piotrgluszek.announcements.entities.AnnouncementEntity;
+import pl.piotrgluszek.announcements.entities.CategoryEntity;
 import pl.piotrgluszek.announcements.model.ApiMessage;
 import pl.piotrgluszek.announcements.services.CategoriesService;
 
@@ -46,6 +47,11 @@ public class CategoriesController {
         int end = (start + pageable.getPageSize()) > list.size() ? list.size() : (start + pageable.getPageSize());
         return new PageImpl<AnnouncementEntity>(list.subList(start, end), pageable, list.size());
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoryEntity>> getAll(){
+        return ResponseEntity.ok(categoriesService.getAll());
     }
 
 
