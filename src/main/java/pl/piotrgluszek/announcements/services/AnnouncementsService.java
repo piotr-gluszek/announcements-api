@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.piotrgluszek.announcements.entities.AnnouncementEntity;
+import pl.piotrgluszek.announcements.entities.CategoryEntity;
 import pl.piotrgluszek.announcements.mappers.AnnouncementEntityMapper;
 import pl.piotrgluszek.announcements.repositories.AnnouncementsRepository;
 
@@ -46,5 +47,8 @@ public class AnnouncementsService {
 
     public Page<AnnouncementEntity> findAll(Pageable pageable) {
         return announcementsRepository.findAll(pageable);
+    }
+    public Page<AnnouncementEntity> findAllCategoriesContains(CategoryEntity category, Pageable pageable){
+        return  announcementsRepository.findByCategoriesContains(category, pageable);
     }
 }

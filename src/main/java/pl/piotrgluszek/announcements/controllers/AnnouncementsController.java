@@ -11,14 +11,17 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.piotrgluszek.announcements.entities.AnnouncementEntity;
+import pl.piotrgluszek.announcements.entities.CategoryEntity;
 import pl.piotrgluszek.announcements.entities.UserEntity;
 import pl.piotrgluszek.announcements.model.ApiMessage;
 import pl.piotrgluszek.announcements.services.AnnouncementsService;
+import pl.piotrgluszek.announcements.services.CategoriesService;
 import pl.piotrgluszek.announcements.services.UserService;
 
 import java.net.URI;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 
@@ -29,12 +32,21 @@ public class AnnouncementsController {
     AnnouncementsService announcementsService;
     @Autowired
     UserService userService;
+    @Autowired
+    CategoriesService categoriesService;
 
 
     @GetMapping
     public ResponseEntity<Page<AnnouncementEntity>> findAll(Pageable pageable) {
         return ResponseEntity.ok().body(announcementsService.findAll(pageable));
     }
+
+    @GetMapping("/from-category/{id}")
+    public ResponseEntity<Page<AnnouncementEntity>> findAllByCategory(@PathVariable("id") Long id,Pageable pageable) {
+        CategoryEntity category = categoriesService.findById(id);
+        return ResponseEntity.ok().body(announcementsService.findAllCategoriesContains(category, pageable));
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable("id") long id) {
@@ -54,7 +66,8 @@ public class AnnouncementsController {
         try {
             AnnouncementEntity announcement = announcementsService.findById(id);
             Long views = announcement.getViews();
-            announcementsService.update(announcement.setViews(views + 1));
+            AnnouncementEntity updatesToAnnouncement = new AnnouncementEntity().setViews(views+1).setId(id);
+            announcementsService.update(updatesToAnnouncement);
             return ResponseEntity.ok().build();
         } catch (NoSuchElementException nse) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiMessage(nse.getMessage()));
