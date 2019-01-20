@@ -10,6 +10,6 @@ import pl.piotrgluszek.announcements.entities.CategoryEntity;
 
 @Repository
 public interface AnnouncementsRepository extends JpaRepository<AnnouncementEntity, Long> {
-    @Query("SELECT ann FROM AnnouncementEntity ann WHERE ?1 IS NULL OR ?1 MEMBER OF ann.categories")
+    @Query("SELECT a FROM AnnouncementEntity a WHERE ?1 IS NULL OR ?1 MEMBER OF a.categories")
     Page<AnnouncementEntity> findByCategoriesContains(CategoryEntity category, Pageable pageable);
 }
